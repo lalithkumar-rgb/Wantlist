@@ -1,0 +1,18 @@
+{
+  "name": "WANTLIST \u2014 Visualise. Plan. Experience.",
+  "short_name": "WANTLIST",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4eee4",
+  "theme_color": "#183a2e",
+  "description": "A premium personal space for aspirations, plans and achievements.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

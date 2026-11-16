@@ -1,0 +1,5 @@
+const CACHE="wantlist-v2";
+const CORE=["./","./index.html","./manifest.webmanifest","./icon.svg"];
+self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
+self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
+self.addEventListener("fetch",event=>{const req=event.request;if(req.method!=="GET")return;const url=new URL(req.url);if(url.origin===location.origin){event.respondWith(caches.match(req).then(hit=>hit||fetch(req).then(res=>{if(res.ok)caches.open(CACHE).then(c=>c.put(req,res.clone()));return res}).catch(()=>caches.match("./"))))}else if(url.hostname==="images.unsplash.com"){event.respondWith(caches.match(req).then(hit=>hit||fetch(req).then(res=>{if(res.ok||res.type==="opaque")caches.open(CACHE).then(c=>c.put(req,res.clone()));return res}).catch(()=>caches.match(req))))}});
