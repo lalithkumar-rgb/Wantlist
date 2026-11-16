@@ -60,3 +60,15 @@ The 24 entries from the supplied Notes screenshot are included. Four crossed-out
 - Edit and delete actions sit beside the item name; redundant lower actions removed.
 - The WANTLIST brand and Settings remain fixed at the top on every screen.
 - Service worker cache bumped to wantlist-v4.
+
+## v1.3 — Home, Collections & Interaction Refinement
+- Added global bottom safe-area clearance so final content on Home, My List, Journey and Progress can scroll above the floating navigation.
+- Home progress summary is now a theme-aware, lower-emphasis interactive card that opens Progress.
+- Collection tiles and Progress breakdown use user-managed collections.
+- Collections can be created, renamed, and deleted with item reassignment confirmation. Renaming updates existing items. Collections persist separately from themes and are included in backups.
+- Add/Edit suggests a collection from the item name and allows manual override.
+- Added curated, item-relevant cover suggestions in the item editor plus local photo upload support.
+- Add/Edit action bar is now a differentiated Cancel + Save row. Save activates after edits; status options stay on one line.
+- Expanded More Details is visually grouped and uses the same type scale and control styling as the rest of the editor.
+- Mark as Acquired uses a more prominent theme-aware action and a short confetti burst only (no congratulatory text). Respects Reduce Motion.
+- Service worker cache bumped to `wantlist-v5`.
