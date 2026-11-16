@@ -1,12 +1,13 @@
 {
-  "name": "WANTLIST \u2014 Visualise. Plan. Experience.",
+  "id": "./",
+  "name": "WANTLIST — Your Personal Space",
   "short_name": "WANTLIST",
+  "description": "A personal space to collect the things you want, plan for them and track what you achieve.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4eee4",
-  "theme_color": "#183a2e",
-  "description": "A premium personal space for aspirations, plans and achievements.",
+  "background_color": "#F4F0E8",
+  "theme_color": "#294A3A",
   "icons": [
     {
       "src": "icon.svg",

@@ -1,4 +1,4 @@
-# WANTLIST v1.0 — GitHub Pages build
+# WANTLIST v1.1 — GitHub Pages build
 
 ## Deploy
 1. Create a GitHub repository named `wantlist`.
@@ -43,3 +43,11 @@ The 24 entries from the supplied Notes screenshot are included. Four crossed-out
 - Bottom navigation is hidden during add/edit and item-detail flows so it cannot cover the content.
 - Add/edit shows only item name, collection and priority first; optional budget, paid amount, link, cover photo, product photo, notes and status are grouped under More details.
 - Removed the Home screen Up Next section and reduced repetitive motivational wording.
+
+## PWA deployment and cache refresh in v1.1
+- Service worker cache was bumped to `wantlist-v3`.
+- Old service-worker caches are deleted during activation.
+- App document and web manifest requests use network-first loading, with cached fallbacks for offline use.
+- The app shell now precaches both the SVG app icon and the Apple touch icon.
+- Web app name, description and launch colours were refreshed to match WANTLIST's updated design.
+- After publishing, close the installed app completely and reopen it while online. If an old screen remains, remove the Home Screen shortcut and add it again after the site has loaded the new version.
