@@ -36,3 +36,10 @@ This is a local-first personal app, not a formally security-audited product. Bro
 
 ## Starter data
 The 24 entries from the supplied Notes screenshot are included. Four crossed-out items are pre-marked as acquired. The duplicate Power bank entry is intentionally preserved for you to review. No prices are invented.
+
+## v1.1 iOS UI redesign
+- Five complete themes, each with coordinated light/dark palettes applied to backgrounds, surfaces, cards, controls, navigation and supporting photography.
+- iOS system typography, persistent high-contrast brand/settings bar, and a sticky back bar on item details.
+- Bottom navigation is hidden during add/edit and item-detail flows so it cannot cover the content.
+- Add/edit shows only item name, collection and priority first; optional budget, paid amount, link, cover photo, product photo, notes and status are grouped under More details.
+- Removed the Home screen Up Next section and reduced repetitive motivational wording.
