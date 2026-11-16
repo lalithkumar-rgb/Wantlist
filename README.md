@@ -51,3 +51,12 @@ The 24 entries from the supplied Notes screenshot are included. Four crossed-out
 - The app shell now precaches both the SVG app icon and the Apple touch icon.
 - Web app name, description and launch colours were refreshed to match WANTLIST's updated design.
 - After publishing, close the installed app completely and reopen it while online. If an old screen remains, remove the Home Screen shortcut and add it again after the site has loaded the new version.
+
+## v1.2 UI refinements
+- Rebuilt bottom navigation with aligned inline SVG icons and a translucent Liquid Glass treatment.
+- Removed duplicate theme access from My List; global settings remains in the persistent app header.
+- My List now has a single-line search and filter control. Status, collection and sort options are grouped in one filter sheet with Apply and Reset.
+- Removed generic category stock thumbnails; only exact known product imagery is used, otherwise a designed typographic cover appears until a personal product photo is added.
+- Edit and delete actions sit beside the item name; redundant lower actions removed.
+- The WANTLIST brand and Settings remain fixed at the top on every screen.
+- Service worker cache bumped to wantlist-v4.

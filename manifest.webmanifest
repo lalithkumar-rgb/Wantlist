@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "WANTLIST — Your Personal Space",
+  "name": "WANTLIST \u2014 Your Personal Space",
   "short_name": "WANTLIST",
-  "description": "A personal space to collect the things you want, plan for them and track what you achieve.",
+  "description": "A beautiful personal space for the things you want to own and experience.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
