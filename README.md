@@ -72,3 +72,16 @@ The 24 entries from the supplied Notes screenshot are included. Four crossed-out
 - Expanded More Details is visually grouped and uses the same type scale and control styling as the rest of the editor.
 - Mark as Acquired uses a more prominent theme-aware action and a short confetti burst only (no congratulatory text). Respects Reduce Motion.
 - Service worker cache bumped to `wantlist-v5`.
+
+
+## v1.4 refinement update
+
+- Home progress summary now uses the selected minimal horizontal progress-bar design.
+- Item detail pages reset to the top when opened.
+- More Details remains one expandable section, with optional fields organized into subtle card groups (Option E).
+- Add/Edit action buttons are fixed to the bottom safe area; form content scrolls above them and ends before the footer.
+- Main navigation content clearance is increased so the final list cards can scroll fully above the floating navigation.
+- Acquisition confetti now originates only from the Mark as Acquired button on the item detail page, falls across the screen for approximately 3.4–4.0 seconds, and fades out. List checkboxes do not trigger confetti. Reduce Motion is respected.
+- Service worker cache updated to wantlist-v6.
+
+Source validation: JavaScript syntax and manifest JSON checked. Please test on iPhone Safari/Home Screen after deploying; this build has not been device-tested.
