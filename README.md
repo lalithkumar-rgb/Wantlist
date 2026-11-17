@@ -111,3 +111,9 @@ Source validation: JavaScript syntax and manifest JSON checked. Please test on i
 - Reworked the acquired celebration for a denser immediate burst, stronger outward velocity, larger foil/confetti/ribbons/streamers, a brief shock ring, and a quick secondary volley.
 - Tuned the effect for an approximately 2.5–3 second finish while retaining theme palettes and iOS Reduce Motion support.
 - All v1.5.4 collection navigation, dock, and Midnight Peaks refinements are retained.
+
+
+## v1.5.6 Final celebration refinement
+- Retains the approved tactile push response and dual-burst celebration.
+- Smooths particle opacity with an eased fade over the final ~0.9 seconds to avoid sudden disappearance.
+- Preserves collection navigation, floating dock, and Midnight Peaks refinements.
