@@ -126,11 +126,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display"
 .collectionmanage-name strong{font-size:13px}.collectionmanage-name small{font-size:10px;color:var(--muted)}
 .collectionadd{width:100%;margin-top:14px}
 .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:200;overflow:hidden}
-.confetti-layer i{position:absolute;left:0;top:0;width:7px;height:13px;border-radius:2px;opacity:0;transform-origin:center;animation:confetti-fall var(--duration,3.7s) cubic-bezier(.16,.62,.32,1) var(--delay,0s) forwards;box-shadow:0 1px 2px rgba(40,25,15,.12)}
+.confetti-layer i{position:absolute;left:0;top:0;width:7px;height:13px;border-radius:2px;opacity:0;transform-origin:center;animation:confetti-big-burst var(--duration,4s) cubic-bezier(.18,.72,.25,1) var(--delay,0s) forwards;box-shadow:0 1px 2px rgba(40,25,15,.12)}
 .confetti-layer i.ribbon{width:5px;height:19px;border-radius:5px 2px 5px 2px}
 .confetti-layer i.square{width:9px;height:9px;border-radius:2px}
 .confetti-layer i.curl{width:5px;height:22px;border-radius:50%;border:2px solid currentColor;background:transparent!important}
-@keyframes confetti-fall{0%{opacity:0;transform:translate(0,0) rotate(0) scale(.55)}8%{opacity:1;transform:translate(var(--dx1),var(--dy1)) rotate(35deg) scale(1)}28%{opacity:1;transform:translate(var(--dx2),var(--dy2)) rotate(calc(var(--rot)*.35))}62%{opacity:.95;transform:translate(var(--dx3),var(--dy3)) rotate(calc(var(--rot)*.72))}88%{opacity:.78;transform:translate(var(--dx),var(--fall)) rotate(var(--rot))}100%{opacity:0;transform:translate(var(--dx4),var(--dy4)) rotate(calc(var(--rot)*1.2))}}
+@keyframes confetti-big-burst{
+0%{opacity:0;transform:translate(0,0) rotate(0) scale(.35)}
+8%{opacity:1;transform:translate(0,-12px) rotate(35deg) scale(1.08)}
+38%{opacity:1;transform:translate(var(--peak-x),var(--peak-y)) rotate(calc(var(--rot)*.35))}
+53%{opacity:1;transform:translate(calc(var(--peak-x)*1.04),calc(var(--peak-y) - 12px)) rotate(calc(var(--rot)*.55))}
+72%{opacity:.9;transform:translate(calc(var(--peak-x)*1.12),calc(var(--peak-y) + 95px)) rotate(calc(var(--rot)*.85))}
+100%{opacity:0;transform:translate(var(--land-x),var(--land-y)) rotate(var(--rot))}}
+
 .actionicon{background:var(--surface-solid);box-shadow:0 3px 12px rgba(0,0,0,.07),inset 0 1px 0 rgba(255,255,255,.4)}
 .acquirebutton{width:100%;min-height:52px;border-radius:17px;background:linear-gradient(135deg,var(--green2),var(--green));color:white;border:0;box-shadow:0 8px 22px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25);font-weight:700;transition:transform .18s}
 .acquirebutton:active{transform:scale(.985)}
@@ -162,7 +169,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display"
 .app{padding-bottom:calc(94px + env(safe-area-inset-bottom))!important}
 .app[data-page="form"],.app[data-page="detail"]{padding-bottom:24px!important}
 .app[data-page="home"] #view,.app[data-page="list"] #view,.app[data-page="journey"] #view,.app[data-page="progress"] #view,.app[data-page="collection"] #view{padding-bottom:12px!important}
-.liststate{min-height:0!important;height:0!important;padding:0!important;margin:0!important}
+#listState{display:none!important;min-height:0!important;height:0!important;padding:0!important;margin:0!important}
 .progress-summary-foot small:last-child{display:none!important}
 .morebody{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:12px 0 8px}
 .detailgroup{min-width:0;width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--surface);border-radius:17px;padding:14px;overflow:hidden}
@@ -171,9 +178,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display"
 .detailgroup .formrow>div{min-width:0}
 .detailgroup label{font-size:12px!important;line-height:1.35;margin:8px 0 7px!important}
 .detailgroup .field{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
-.coverchoices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.coverchoice{min-width:0;width:100%;overflow:hidden}
-.coverchoice img{width:100%;height:82px;object-fit:cover;display:block}
+.coverchoices{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;padding:3px 2px 8px;scrollbar-width:none;scroll-snap-type:x mandatory}.coverchoices::-webkit-scrollbar{display:none}
+.coverchoice{flex:0 0 78px;width:78px;min-width:78px;height:92px;padding:0;overflow:hidden;scroll-snap-align:start;border-radius:13px}
+.coverchoice img{width:100%;height:100%;object-fit:cover;display:block}.coverchoice span{display:none!important}
 .coverchoice span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
 .uploadbox{width:100%;min-width:0;overflow:hidden;overflow-wrap:anywhere}
 .uploadbox input{display:block;width:100%;max-width:100%;font-size:12px}
@@ -191,6 +198,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display"
 .collection-status{font-size:20px;color:var(--green2);padding:0 8px}
 .app[data-page="journey"] .journeyhero{margin-bottom:14px}
 @media(min-width:600px){.morebody{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.detailgroup{height:100%}}
+/* v1.5.1 cover picker and count alignment corrections */
+#listState{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important}
+.detailgroup .coverchoices{display:flex!important;flex-wrap:nowrap!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:3px 2px 8px!important;scrollbar-width:none;scroll-snap-type:x mandatory}
+.detailgroup .coverchoices::-webkit-scrollbar{display:none}
+.detailgroup .coverchoice{display:block!important;flex:0 0 78px!important;width:78px!important;min-width:78px!important;height:92px!important;padding:0!important;overflow:hidden!important;scroll-snap-align:start;border-radius:13px!important}
+.detailgroup .coverchoice img{width:100%!important;height:100%!important;aspect-ratio:auto!important;object-fit:cover!important;display:block!important}
+.detailgroup .coverchoice span{display:none!important}
 </style>
 </head>
 <body>
@@ -269,7 +283,7 @@ const COVER_SUGGESTIONS=[
  {keys:["chair","table","clock","blind"],label:"Home interior",url:"https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=900&q=85&auto=format&fit=crop"},
  {keys:["travel","album","trip"],label:"Travel",url:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&q=85&auto=format&fit=crop"}
 ];
-function suggestedCovers(name){const n=(name||"").toLowerCase();const hit=COVER_SUGGESTIONS.find(x=>x.keys.some(k=>n.includes(k)));return hit?[hit,...COVER_SUGGESTIONS.filter(x=>x!==hit).slice(0,3)]:COVER_SUGGESTIONS.slice(0,4)}
+function suggestedCovers(name){const n=(name||"").toLowerCase();const hit=COVER_SUGGESTIONS.find(x=>x.keys.some(k=>n.includes(k)));return hit?[hit,...COVER_SUGGESTIONS.filter(x=>x!==hit).slice(0,7)]:COVER_SUGGESTIONS.slice(0,8)}
 function suggestCollection(name){const n=(name||"").toLowerCase();const rules=[
  [/camera|lens|photograph|selfie|tripod/,"Photography"],
  [/car|bike|motor|dash|vehicle|helmet|tyre|seat|holder/,"Vehicles"],
@@ -366,7 +380,7 @@ function applySheetFilters(){filter=window.sheetStatus??filter;filterCategory=wi
 function applyListFilters(){
  let arr=items.filter(x=>(filter==="All"||x.status===filter)&&(!filterCategory||x.category===filterCategory)&&x.name.toLowerCase().includes(searchTerm.toLowerCase()));
  arr.sort((a,b)=>sortBy==="az"?a.name.localeCompare(b.name):sortBy==="recent"?new Date(b.added)-new Date(a.added):sortBy==="price"?(+b.budget||0)-(+a.budget||0):({High:0,Soon:1,Someday:2}[a.priority]-({High:0,Soon:1,Someday:2}[b.priority])));
- const state=$("#listState");if(state)state.textContent=`${arr.length} ${arr.length===1?"item":"items"}${filter!=="All"?" · "+filter:""}${filterCategory?" · "+filterCategory:""}`;
+ const state=$("#listState");if(state)state.textContent="";
  $("#itemsContainer").innerHTML=arr.length?arr.map(x=>`<div class="itemrow ${x.status==='Purchased'?'purchased':''}"><button class="artbutton" onclick="openDetail('${x.id}')" aria-label="Open ${esc(x.name)}">${itemArtwork(x)}</button><div class="iteminfo" onclick="openDetail('${x.id}')"><strong>${esc(x.name)}</strong><small>${esc(x.category)}${x.budget?" · "+money(x.budget):""}</small><span class="priority">${esc(x.priority)} priority</span></div><button class="check ${x.status==='Purchased'?'done':''}" aria-label="Toggle acquired" onclick="event.stopPropagation();togglePurchased('${x.id}')">${x.status==='Purchased'?'✓':''}</button></div>`).join(""):'<div class="empty"><b>Nothing here just yet.</b>Try changing your filters or search terms.</div>';
 }
 function openDetail(id){selectedId=id;page="detail";render()}
@@ -383,12 +397,16 @@ function celebrateAcquired(button){
  const palettes={alpine:["#B77E5B","#D9A77E","#E8D7B9","#F2E7D4","#A8B7A0"],forest:["#6F8B63","#A8B98D","#E8E5C9","#D4B879","#F3EBDD"],coast:["#6D9FA6","#D5B99A","#F1E6D4","#8EB9C2","#D9A78C"],desert:["#B77E5B","#D9A77E","#E8D7B9","#F2E7D4","#C58B70"],midnight:["#D6C39B","#B8C5D6","#8298B4","#F0E5D0","#A88F78"]};
  const palette=palettes[selectedTheme]||palettes.alpine,rect=button.getBoundingClientRect(),ox=rect.left+rect.width/2,oy=rect.top+rect.height/2;
  const layer=document.createElement("div");layer.className="confetti-layer";layer.setAttribute("aria-hidden","true");
- for(let i=0;i<118;i++){const bit=document.createElement("i"),kind=i%13===0?"curl":i%4===0?"ribbon":i%3===0?"square":"";if(kind)bit.className=kind;
- const angle=-Math.PI/2+(Math.random()-.5)*2.9,dist=115+Math.random()*260,dx=Math.cos(angle)*dist+(Math.random()-.5)*100,fall=innerHeight*.7+Math.random()*innerHeight*.18,color=palette[i%palette.length];
- bit.style.left=ox+"px";bit.style.top=oy+"px";bit.style.color=color;bit.style.background=color;
- [["--dx",dx+"px"],["--fall",fall+"px"],["--dx1",dx*.12+"px"],["--dy1","-35px"],["--dx2",dx*.42+"px"],["--dy2",fall*.22+"px"],["--dx3",dx*.78+"px"],["--dy3",fall*.66+"px"],["--dx4",dx*1.08+"px"],["--dy4",fall+30+"px"],["--rot",(Math.random()*1100-550)+"deg"],["--delay",Math.random()*.18+"s"],["--duration",3.6+Math.random()*.5+"s"]].forEach(v=>bit.style.setProperty(v[0],v[1]));
- layer.appendChild(bit)}
- document.body.appendChild(layer);setTimeout(()=>layer.remove(),4600)
+ for(let i=0;i<124;i++){
+  const bit=document.createElement("i"),kind=i%13===0?"curl":i%4===0?"ribbon":i%3===0?"square":"";if(kind)bit.className=kind;
+  const angle=-Math.PI/2+(Math.random()-.5)*2.65,dist=145+Math.random()*245;
+  const peakX=Math.cos(angle)*dist+(Math.random()-.5)*45,peakY=Math.sin(angle)*dist-35;
+  const landX=peakX+(Math.random()-.5)*110,landY=Math.max(520,innerHeight-oy+220+Math.random()*260),color=palette[i%palette.length];
+  bit.style.left=ox+"px";bit.style.top=oy+"px";bit.style.color=color;bit.style.background=color;
+  [["--peak-x",peakX+"px"],["--peak-y",peakY+"px"],["--land-x",landX+"px"],["--land-y",landY+"px"],["--rot",(Math.random()*1100-550)+"deg"],["--delay",(Math.random()*.16)+"s"],["--duration",(3.8+Math.random()*.65)+"s"]].forEach(v=>bit.style.setProperty(v[0],v[1]));
+  layer.appendChild(bit);
+ }
+ document.body.appendChild(layer);setTimeout(()=>layer.remove(),4900)
 }
 function togglePurchased(id,trigger){let x=items.find(i=>i.id===id);if(!x)return;if(x.status==="Purchased"){x.status="To Buy";x.purchasedAt="";x.actual=0;toast("Moved back to My List")}else{x.status="Purchased";x.purchasedAt=new Date().toISOString();if(trigger)celebrateAcquired(trigger)}save();render()}
 function journey(){let arr=bought().slice().sort((a,b)=>new Date(b.purchasedAt||b.added)-new Date(a.purchasedAt||a.added));$("#view").innerHTML=`<div class="journeyhero"><div class="eyebrow">LOOK HOW FAR YOU'VE COME</div><h1>My Journey</h1><div style="font-size:12px;color:#eee">The things you've brought to life.</div></div><div class="sectionhead" style="padding:8px 22px"><h2>Milestones</h2></div><div class="timeline">${arr.length?arr.map(x=>`<div class="timeitem"><img class="mini" src="${esc(x.aspirationImage||x.productImage||HEROES[0].url)}"><div style="flex:1"><strong>${esc(x.name)}</strong><small>${x.purchasedAt?new Date(x.purchasedAt).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):"Date not recorded"}${x.actual?" · "+money(x.actual):""}</small></div><span style="color:var(--green2)">✓</span></div>`).join(""):'<div class="empty"><b>Your first milestone is waiting.</b>When you acquire something from your list, it will be celebrated here.</div>'}</div>`}
@@ -406,7 +424,7 @@ function formPage(){
  <details class="moreoptions"><summary>More details <span>Budget, link, photos & notes</span></summary><div class="morebody">
  <section class="detailgroup budgetgroup"><div class="detailgroup-title">Budget</div><div class="formrow"><div><label>Estimated budget (₹)</label><input class="field" name="budget" type="number" min="0" step="1" placeholder="Optional" value="${x.budget||""}"></div><div><label>Actual paid (₹)</label><input class="field" name="actual" type="number" min="0" step="1" placeholder="Optional" value="${x.actual||""}"></div></div></section>
  <section class="detailgroup"><div class="detailgroup-title">Product link</div><input class="field" name="link" type="url" placeholder="https://…" value="${esc(x.link||"")}"></section>
- <section class="detailgroup"><div class="detailgroup-title">Cover photograph</div><div class="coverpicker"><div class="coverchoices" id="coverChoices">${suggestedCovers(x.name||"").map((c,j)=>`<button type="button" class="coverchoice ${(x.aspirationImage||PRODUCT_IMAGES[x.name]||"")===c.url||(j===0&&!x.aspirationImage&&!PRODUCT_IMAGES[x.name])?"selected":""}" onclick="chooseCover('${c.url}',this)"><img src="${c.url}" alt="${c.label}"><span>${c.label}</span></button>`).join("")}</div><input type="hidden" name="aspirationImage" id="coverValue" value="${esc(x.aspirationImage||PRODUCT_IMAGES[x.name]||suggestedCovers(x.name||"")[0]?.url||"")}"><small class="muted">Choose a suggested cover or use your own product photo below.</small></div></section>
+ <section class="detailgroup"><div class="detailgroup-title">Cover photograph</div><div class="coverpicker"><div class="coverchoices" id="coverChoices">${suggestedCovers(x.name||"").map((c,j)=>`<button type="button" class="coverchoice ${(x.aspirationImage||PRODUCT_IMAGES[x.name]||"")===c.url||(j===0&&!x.aspirationImage&&!PRODUCT_IMAGES[x.name])?"selected":""}" onclick="chooseCover('${c.url}',this)"><img src="${c.url}" alt="${c.label}"></button>`).join("")}</div><input type="hidden" name="aspirationImage" id="coverValue" value="${esc(x.aspirationImage||PRODUCT_IMAGES[x.name]||suggestedCovers(x.name||"")[0]?.url||"")}"><small class="muted">Choose a suggested cover or use your own product photo below.</small></div></section>
  <section class="detailgroup"><div class="detailgroup-title">Product photo <span class="optional-tag">Optional</span></div><div class="uploadbox">A photo of the exact product. Stored only on this device.<br><input type="file" name="productImage" accept="image/jpeg,image/png,image/webp" onchange="previewUpload(this)"><div id="uploadPreview" style="margin-top:8px">${x.productImage?'<img src="'+esc(x.productImage)+'" style="width:76px;height:65px;object-fit:cover;border-radius:9px">':""}</div></div></section>
  <section class="detailgroup"><div class="detailgroup-title">Notes <span class="optional-tag">Optional</span></div><textarea class="field" name="notes" placeholder="Optional details…">${esc(x.notes||"")}</textarea></section>
  ${editId?`<section class="detailgroup statusgroup"><div class="detailgroup-title">Status</div><div class="choice statuschoice">${["To Buy","Purchased"].map(v=>`<button type="button" class="${formStatus===v?"selected":""}" onclick="formStatus='${v}';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('selected'));this.classList.add('selected');markFormDirty()">${v==="Purchased"?"Acquired":"To Buy"}</button>`).join("")}</div></section>`:""}
@@ -416,7 +434,7 @@ const form=$(".compactform");if(form){form.dataset.dirty=editId?"0":"1";form.add
 }
 let pendingImage="";
 function previewUpload(input){let f=input.files[0];if(!f)return;if(!["image/jpeg","image/png","image/webp"].includes(f.type)){toast("Choose a JPG, PNG or WebP image");input.value="";return}if(f.size>2.5*1024*1024){toast("Please choose an image under 2.5 MB");input.value="";return}let r=new FileReader();r.onload=()=>{pendingImage=r.result;$("#uploadPreview").innerHTML=`<img src="${pendingImage}" style="width:76px;height:65px;object-fit:cover;border-radius:9px">`};r.readAsDataURL(f)}
-function autoSuggestItem(name){const sel=$("#itemCollection");if(!sel)return;const choice=suggestCollection(name);if(!collectionManuallyChosen&&choice&&collections.some(c=>c.name===choice)){sel.value=choice;$("#collectionHint").textContent="Suggested: "+choice+" · You can change this anytime"}const box=$("#coverChoices");if(box){box.innerHTML=suggestedCovers(name).map((c,j)=>`<button type="button" class="coverchoice ${j===0?'selected':''}" onclick="chooseCover('${c.url}',this)"><img src="${c.url}" alt="${c.label}"><span>${c.label}</span></button>`).join("");$("#coverValue").value=suggestedCovers(name)[0]?.url||""}}
+function autoSuggestItem(name){const sel=$("#itemCollection");if(!sel)return;const choice=suggestCollection(name);if(!collectionManuallyChosen&&choice&&collections.some(c=>c.name===choice)){sel.value=choice;$("#collectionHint").textContent="Suggested: "+choice+" · You can change this anytime"}const box=$("#coverChoices");if(box){box.innerHTML=suggestedCovers(name).map((c,j)=>`<button type="button" class="coverchoice ${j===0?'selected':''}" onclick="chooseCover('${c.url}',this)"><img src="${c.url}" alt="${c.label}"></button>`).join("");$("#coverValue").value=suggestedCovers(name)[0]?.url||""}}
 function chooseCover(url,button){$("#coverValue").value=url;button.parentElement.querySelectorAll(".coverchoice").forEach(b=>b.classList.remove("selected"));button.classList.add("selected");markFormDirty()}
 function markFormDirty(){const b=$(".savebutton");if(b)b.disabled=false}
 function cancelForm(){if(formDirty()&&!confirm("Discard your unsaved changes?"))return;if(editId)openDetail(editId);else navigate("home")}

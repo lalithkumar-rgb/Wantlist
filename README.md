@@ -86,3 +86,9 @@ The 24 entries from the supplied Notes screenshot are included. Four crossed-out
 
 Source validation: JavaScript syntax and manifest JSON checked. Please test on iPhone Safari/Home Screen after deploying; this build has not been device-tested.
 \n\n## v1.5 refinement\n- Mobile-first single-column More Details layout; two columns only on wider screens.\n- Reduced bottom scroll clearance while retaining safe space for floating navigation.\n- Journey focuses on milestones; duplicate statistics removed.\n- Removed repeated item-count labels from Home and My List.\n- Home collection tiles open dedicated collection views with search and live item counts.\n- Theme-aware Big Burst confetti, triggered only by Mark as Acquired.\n- Service worker cache updated.\n
+
+## v1.5.1 corrections
+- Rebuilt confetti CSS and trajectory for a true upward semicircular burst followed by gravity; burst originates at the Mark as Acquired button.
+- Removed the duplicate filtered item count below the My List search row; the header count remains.
+- Cover picker is now an image-only horizontal scroller with up to eight suggestions; labels removed.
+- Service worker cache updated to wantlist-v8.
