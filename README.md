@@ -1,26 +1,31 @@
-# WANTLIST v1.5.9 — Final Acquired Interaction
+# WANTLIST v1.6.0 — Final Consolidated Build
 
-This consolidated GitHub Pages build preserves the existing WANTLIST data model and app features while adding the approved acquired-item interaction.
+Production update based on the approved v1.6.0 behavior and the selected **Option A — Balanced** item-details layout.
 
-## What's included
-- Subtle press-in/release feedback on **Mark as Acquired**.
-- A lightweight card response as the acquired state appears.
-- Celebration begins from the button's captured original screen position before the detail view changes.
-- Five staggered particle waves with evenly distributed upward fan, a stronger returning/falling layer, ribbons, streamers, stars and confetti shapes.
-- Theme-aware celebration palettes for Alpine, Forest, Coast, Desert Glow and Midnight Peaks.
-- Acquired status and date shown in the detail view; the large action button is removed after acquisition.
-- A reserved Undo icon slot immediately to the left of Edit. It fades in after acquisition while Edit and Delete remain in their existing positions.
-- Undo returns the item to To Buy without another celebration or toast.
-- Service worker cache version incremented to refresh deployed assets.
+## Item details — Option A
+- Retains the single large product image at the top; removes the duplicate “Your product photo” block.
+- Keeps the item title and action controls in their existing positions.
+- Shows Acquired / To Buy status near the top.
+- Groups estimated budget and actual amount side by side under Purchase overview.
+- Shows a savings / budget-overrun indicator when the item is acquired and both amounts are available.
+- Groups the product link and optional notes under Product information.
+- Preserves the sage-green visual identity and responsive light/dark themes.
 
-## Deploy
-Upload the contents of this ZIP to the root of the existing GitHub Pages repository, replacing the matching files. Do not upload the ZIP itself.
+## Other v1.6.0 changes retained
+- Purchase confirmation sheet with an optional actual-amount field.
+- Actual amount is retained when an item is moved back to To Buy and acquired again.
+- The item's uploaded product image takes priority in My List cards and Journey entries.
+- Product-link review affordance and manual fallback guidance for stores that block automated metadata access.
+- Existing celebration animation and interaction are retained.
 
-## Files
-- `index.html` — app and interaction changes
-- `sw.js` — cache version update
-- `manifest.webmanifest`
-- `icon.svg`
-- `apple-touch-icon.png`
+## Data safety
+- Startup uses the existing `initialiseData()` path.
+- No preview/sample item is injected and no existing item list is replaced.
+- Existing IndexedDB/localStorage data model and backup format are retained.
+- Export a JSON backup before deploying an app update.
 
-Existing IndexedDB/localStorage data structures are unchanged. The app is not deployed automatically; upload the files to GitHub Pages to publish this build.
+## Deployment
+Upload the contents of this folder to the root of the existing GitHub Pages repository, replacing the previous app files. Keep filenames and directory structure unchanged. The service-worker cache name has been advanced so the updated app assets are fetched after deployment.
+
+## Product metadata limitation
+The Find product details control validates the URL and explains the lookup limitation; it does not perform live retailer scraping. A compatible metadata service is required for reliable automatic title, image, and price extraction.

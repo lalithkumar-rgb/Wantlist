@@ -1,4 +1,4 @@
-const CACHE = "wantlist-v13";
+const CACHE = "wantlist-v16";
 const CORE = [
   "./",
   "./index.html",
