@@ -98,3 +98,10 @@ Source validation: JavaScript syntax and manifest JSON checked. Please test on i
 - Integrated the approved Big Burst v2 celebration with theme-specific palettes and reduced-motion support.
 - Retained robust collection tile navigation and collection item search/detail navigation.
 - Refined the floating bottom navigation dock sizing, readability, and iPhone safe-area positioning.
+
+
+## v1.5.4 Consolidated Release
+- Celebration effect rebuilt for a faster, denser, multi-wave surprise burst with varied confetti, ribbons, and streamers.
+- Midnight Peaks refined with layered midnight navy, blue-slate surfaces, and champagne accents in light and dark appearance.
+- Floating bottom navigation enlarged and repositioned with improved labels, icons, and iPhone safe-area spacing.
+- Collection navigation fix retained from v1.5.2/v1.5.3.
