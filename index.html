@@ -260,6 +260,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display"
 }
 
 
+/* v1.5.9 final acquired interaction */
+.acquirebutton{transform-origin:center;transition:transform .16s cubic-bezier(.2,.8,.2,1),filter .16s;will-change:transform}
+.acquirebutton:active,.acquirebutton.is-pressing{transform:scale(.965);filter:brightness(1.06)}
+.undo-slot{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center}
+.undo-slot .actionicon{opacity:0;transform:scale(.82);pointer-events:none;transition:opacity .24s ease,transform .24s cubic-bezier(.2,.8,.2,1)}
+.undo-slot.visible .actionicon{opacity:1;transform:scale(1);pointer-events:auto}
+@media(max-width:390px){.undo-slot{width:37px;height:37px;flex-basis:37px}}
 /* v1.5.8 acquired interaction: subtle tactile push, matching the approved preview */
 @keyframes acquireCardPush{
  0%{transform:scale(1)}
@@ -453,92 +460,37 @@ function detail(){
  let x=items.find(i=>i.id===selectedId);if(!x){navigate("list");return}
  const cover=x.productImage||x.aspirationImage||PRODUCT_IMAGES[x.name]||suggestedCovers(x.name)[0]?.url||"";
  const hero=cover?`<div class="detailhero"><img src="${esc(cover)}" alt="${esc(x.name)}"></div>`:itemArtworkFallback(x.id,"detailart",x.category,x.name);
- $("#view").innerHTML=`<div class="pagehead detailbar"><button class="backbtn" onclick="navigate('list')"><span>‹</span> My List</button></div>${hero}<div class="detailbody"><div class="detailtitleline"><div class="detailtitlecopy"><div class="eyebrow" style="color:var(--green2)">ITEM DETAILS</div><h1>${esc(x.name)}</h1><div class="detailmeta muted">${esc(x.category)} · ${esc(x.priority)} priority</div></div><div class="detailactions"><button class="actionicon" onclick="editItem('${x.id}')" aria-label="Edit item"><svg viewBox="0 0 24 24"><path d="m14 5 5 5M4 20l4.5-1 11-11a2.1 2.1 0 0 0-3-3l-11 11z"/></svg></button><button class="actionicon danger" onclick="deleteItem('${x.id}')" aria-label="Delete item"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5"/></svg></button></div></div>
+ $("#view").innerHTML=`<div class="pagehead detailbar"><button class="backbtn" onclick="navigate('list')"><span>‹</span> My List</button></div>${hero}<div class="detailbody"><div class="detailtitleline"><div class="detailtitlecopy"><div class="eyebrow" style="color:var(--green2)">ITEM DETAILS</div><h1>${esc(x.name)}</h1><div class="detailmeta muted">${esc(x.category)} · ${esc(x.priority)} priority</div></div><div class="detailactions"><span class="undo-slot ${x.status==="Purchased"?"visible":""}"><button class="actionicon" onclick="togglePurchased('${x.id}')" aria-label="Move back to To Buy" title="Move back to To Buy"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-2"/></svg></button></span><button class="actionicon" onclick="editItem('${x.id}')" aria-label="Edit item"><svg viewBox="0 0 24 24"><path d="m14 5 5 5M4 20l4.5-1 11-11a2.1 2.1 0 0 0-3-3l-11 11z"/></svg></button><button class="actionicon danger" onclick="deleteItem('${x.id}')" aria-label="Delete item"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5"/></svg></button></div></div>
  ${x.productImage?`<div class="productref"><img src="${esc(x.productImage)}" alt="Product reference"><div><strong style="font-size:12px">Your product photo</strong><small>Personal reference image</small></div></div>`:""}<div class="detailgrid"><div class="infobox"><small>Estimated budget</small><strong>${money(x.budget)}</strong></div><div class="infobox"><small>Actual amount</small><strong>${x.actual?money(x.actual):"Not acquired"}</strong></div></div>
- ${safeHttpUrl(x.link)?`<div class="panel"><h3>Product link</h3><a href="${esc(safeHttpUrl(x.link))}" target="_blank" rel="noopener" style="color:var(--green2);font-size:12px;word-break:break-all">${esc(x.link)}</a></div>`:""}${x.notes?`<div class="panel"><h3>Notes</h3><p>${esc(x.notes)}</p></div>`:""}${x.status==="Purchased"?`<div class="panel"><h3>Acquired</h3><p>${x.purchasedAt?new Date(x.purchasedAt).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"}):"Purchase date not recorded"}</p></div>`:""}<button class="primary acquirebutton" onclick="togglePurchased('${x.id}',this)">${x.status==="Purchased"?"↶ Move back to To Buy":"✓ Mark as Acquired"}</button></div>`;
+ ${safeHttpUrl(x.link)?`<div class="panel"><h3>Product link</h3><a href="${esc(safeHttpUrl(x.link))}" target="_blank" rel="noopener" style="color:var(--green2);font-size:12px;word-break:break-all">${esc(x.link)}</a></div>`:""}${x.notes?`<div class="panel"><h3>Notes</h3><p>${esc(x.notes)}</p></div>`:""}${x.status==="Purchased"?`<div class="panel acquired-status"><h3>✓ &nbsp;Acquired</h3><p>${x.purchasedAt?new Date(x.purchasedAt).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"}):"Purchase date not recorded"}</p></div>`:""}${x.status!=="Purchased"?`<button class="primary acquirebutton" onclick="togglePurchased('${x.id}',this)">✓ Mark as Acquired</button>`:""}</div>`;
 }
-function celebrateAcquired(button){
+function celebrateAcquired(button, capturedRect){
  if(!button||(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches))return;
- // Capture the original button position before the acquired state changes the layout.
- const rect=button.getBoundingClientRect();
+ const rect=capturedRect||button.getBoundingClientRect();
  const origin={x:rect.left+rect.width/2,y:rect.top+rect.height*.15};
- const palettes={
-  alpine:["#168FE5","#36C5F0","#00AFA9","#FFFFFF","#7B83E8","#B6E9FF","#F2D7FF"],
-  forest:["#245B3D","#5D9B5D","#A7CA78","#E5C35E","#F2E8C7","#80B49B","#D89A55"],
-  coast:["#087FAD","#24B7C6","#83D7D4","#F5D69A","#FFFFFF","#4C8EB7","#E8A98A"],
-  desert:["#C45B3C","#E47B4E","#F2B957","#F6D9A6","#D76C72","#A94F3E","#F1A879"],
-  midnight:["#DDEBFF","#8CA9E6","#6579D0","#E8C987","#FFFFFF","#9CAED0","#B9C7F0"]
- };
- const colors=palettes[selectedTheme]||palettes.alpine;
- const old=document.getElementById("wantlist-celebration");if(old)old.remove();
- const canvas=document.createElement("canvas");canvas.id="wantlist-celebration";canvas.setAttribute("aria-hidden","true");
- Object.assign(canvas.style,{position:"fixed",inset:"0",width:"100vw",height:"100vh",zIndex:"9999",pointerEvents:"none"});
- document.body.appendChild(canvas);
- const ctx=canvas.getContext("2d");if(!ctx){canvas.remove();return}
- let W=0,H=0,parts=[],raf=0,last=0,started=0;
- function resize(){const d=Math.min(window.devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=W*d;canvas.height=H*d;ctx.setTransform(d,0,0,d,0,0)}
- resize();
- const shapes=["rect","rect","rect","circle","streamer","ribbon","curl","star"];
- function volley(count,delay){
-  setTimeout(()=>{
-   if(!canvas.isConnected)return;
-   for(let i=0;i<count;i++){
-    const angle=-Math.PI/2+(Math.random()-.5)*2.35;
-    const speed=H*(.72+Math.random()*.78);
-    const k=Math.random(),shape=k<.13?"circle":k<.24?"streamer":k<.32?"ribbon":k<.39?"curl":k<.45?"star":"rect";
-    const scale=1.18;
-    parts.push({
-     x:origin.x+(Math.random()-.5)*rect.width*.15,
-     y:origin.y+(Math.random()-.5)*5,
-     vx:Math.cos(angle)*speed*(.48+Math.random()*.48),
-     vy:Math.sin(angle)*speed,
-     g:H*(.48+Math.random()*.28),
-     drag:.992+Math.random()*.005,
-     w:(2+Math.random()*2.8)*scale,
-     h:(4+Math.random()*5.5)*scale,
-     rot:Math.random()*6.28,
-     spin:(Math.random()-.5)*.24,
-     color:colors[Math.floor(Math.random()*colors.length)],
-     shape,age:0,life:3.1+Math.random()*1.2,alpha:1
-    });
-   }
-  },delay);
- }
- // Exact preview timing and particle mix: five dense, overlapping upward waves.
- volley(145,0);volley(110,90);volley(100,185);volley(85,300);volley(65,440);
- const detailBody=document.querySelector("#view .detailbody");
- if(detailBody){detailBody.classList.remove("acquire-push");void detailBody.offsetWidth;detailBody.classList.add("acquire-push")}
- started=last=performance.now();
- function draw(now){
-  const dt=Math.min((now-last)/1000,.035);last=now;ctx.clearRect(0,0,W,H);
-  const elapsed=now-started;
+ const palettes={alpine:["#168FE5","#36C5F0","#00AFA9","#FFFFFF","#7B83E8","#B6E9FF","#F2D7FF"],forest:["#245B3D","#5D9B5D","#A7CA78","#E5C35E","#F2E8C7","#80B49B","#D89A55"],coast:["#087FAD","#24B7C6","#83D7D4","#F5D69A","#FFFFFF","#4C8EB7","#E8A98A"],desert:["#C45B3C","#E47B4E","#F2B957","#F6D9A6","#D76C72","#A94F3E","#F1A879"],midnight:["#DDEBFF","#8CA9E6","#6579D0","#E8C987","#FFFFFF","#9CAED0","#B9C7F0"]};
+ const colors=palettes[selectedTheme]||palettes.alpine;document.getElementById("wantlist-celebration")?.remove();
+ const canvas=document.createElement("canvas");canvas.id="wantlist-celebration";canvas.setAttribute("aria-hidden","true");Object.assign(canvas.style,{position:"fixed",inset:"0",width:"100vw",height:"100vh",zIndex:"9999",pointerEvents:"none"});document.body.appendChild(canvas);
+ const ctx=canvas.getContext("2d");if(!ctx){canvas.remove();return}let W=0,H=0,parts=[],last=0,started=0;
+ function resize(){const d=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=W*d;canvas.height=H*d;ctx.setTransform(d,0,0,d,0,0)}resize();
+ function volley(count,delay,highShare){setTimeout(()=>{if(!canvas.isConnected)return;for(let i=0;i<count;i++){
+  const u=(i+Math.random()*.8)/count,angle=-Math.PI/2+(u-.5)*2.65,s=Math.random(),high=s<highShare;
+  const speed=H*(high?.78+Math.random()*.56:.52+Math.random()*.28),gravity=H*(high?.30+Math.random()*.12:.34+Math.random()*.10);
+  const k=Math.random(),shape=k<.13?"circle":k<.24?"streamer":k<.32?"ribbon":k<.39?"curl":k<.45?"star":"rect",scale=1.18;
+  parts.push({x:origin.x+(Math.random()-.5)*rect.width*.15,y:origin.y+(Math.random()-.5)*5,vx:Math.cos(angle)*speed*(.65+Math.random()*.28),vy:Math.sin(angle)*speed,g:gravity,drag:.997+Math.random()*.002,w:(2+Math.random()*2.8)*scale,h:(4+Math.random()*5.5)*scale,rot:Math.random()*6.28,spin:(Math.random()-.5)*.2,color:colors[Math.floor(Math.random()*colors.length)],shape,age:0,life:5+Math.random()*1.3,phase:Math.random()*6.28});
+ }},delay)}
+ // Evenly spread fan, with a stronger returning layer and a smaller high-reaching layer.
+ volley(160,0,.28);volley(145,120,.28);volley(135,260,.28);volley(115,430,.28);volley(95,620,.28);
+ const detailBody=document.querySelector("#view .detailbody");if(detailBody){detailBody.classList.remove("acquire-push");void detailBody.offsetWidth;detailBody.classList.add("acquire-push")}
+ started=last=performance.now();function draw(now){const dt=Math.min((now-last)/1000,.035);last=now;ctx.clearRect(0,0,W,H);const elapsed=now-started;
   if(elapsed<500){const t=elapsed/500;ctx.save();ctx.globalAlpha=(1-t)*.5;ctx.strokeStyle=colors[3];ctx.lineWidth=3.5*(1-t)+.5;ctx.beginPath();ctx.arc(origin.x,origin.y,12+t*135,0,Math.PI*2);ctx.stroke();ctx.restore()}
-  for(let i=parts.length-1;i>=0;i--){
-   const p=parts[i];p.age+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
-   p.vx*=Math.pow(p.drag,dt*60);
-   // Gravity is pixels/second², matching the approved preview's physics.
-   p.vy+=p.g*dt;p.rot+=p.spin*dt*60;
-   const t=p.age/p.life;
-   if(t>=1||p.y>H+35||p.x<-50||p.x>W+50){parts.splice(i,1);continue}
-   let alpha=1;
-   if(t>.73){const f=Math.max(0,(1-t)/.27);alpha=f*f*(3-2*f)}
-   ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=alpha;ctx.fillStyle=p.color;ctx.strokeStyle=p.color;
-   if(p.shape==="circle"){ctx.beginPath();ctx.arc(0,0,p.w*.65,0,Math.PI*2);ctx.fill()}
-   else if(p.shape==="streamer"){ctx.lineWidth=Math.max(1,p.w*.7);ctx.lineCap="round";ctx.beginPath();ctx.moveTo(0,-p.h*2);ctx.bezierCurveTo(p.w*2,-p.h,-p.w*2,p.h,0,p.h*2);ctx.stroke()}
-   else if(p.shape==="curl"){ctx.lineWidth=Math.max(1,p.w*.65);ctx.beginPath();ctx.ellipse(0,0,p.w*.65,p.h*.48,p.rot,0,Math.PI*2);ctx.stroke()}
-   else if(p.shape==="ribbon"){ctx.fillRect(-p.w*.4,-p.h*1.7,p.w*.8,p.h*3.4)}
-   else if(p.shape==="star"){ctx.beginPath();for(let k=0;k<10;k++){const rr=k%2?p.w*.42:p.w,ang=-Math.PI/2+k*Math.PI/5;ctx.lineTo(Math.cos(ang)*rr,Math.sin(ang)*rr)}ctx.closePath();ctx.fill()}
-   else ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
-   ctx.restore();
-  }
-  if(parts.length||now-started<4900)raf=requestAnimationFrame(draw);
-  else{ctx.clearRect(0,0,W,H);canvas.remove()}
- }
- raf=requestAnimationFrame(draw);
- window.addEventListener("resize",resize,{once:true});
- setTimeout(()=>{cancelAnimationFrame(raf);if(canvas.isConnected)canvas.remove()},5600);
+  for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.age+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=Math.pow(p.drag,dt*60);p.vy+=p.g*dt;p.x+=Math.sin(p.age*1.7+p.phase)*7*dt;p.rot+=p.spin*dt*60;const t=p.age/p.life;if(t>=1||p.y>H+35||p.x<-50||p.x>W+50){parts.splice(i,1);continue}let a=1;if(t>.8){const f=Math.max(0,(1-t)/.2);a=f*f*(3-2*f)}ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=a;ctx.fillStyle=p.color;ctx.strokeStyle=p.color;
+   if(p.shape==="circle"){ctx.beginPath();ctx.arc(0,0,p.w*.65,0,Math.PI*2);ctx.fill()}else if(p.shape==="streamer"){ctx.lineWidth=Math.max(1,p.w*.7);ctx.lineCap="round";ctx.beginPath();ctx.moveTo(0,-p.h*2);ctx.bezierCurveTo(p.w*2,-p.h,-p.w*2,p.h,0,p.h*2);ctx.stroke()}else if(p.shape==="curl"){ctx.lineWidth=Math.max(1,p.w*.65);ctx.beginPath();ctx.ellipse(0,0,p.w*.65,p.h*.48,p.rot,0,Math.PI*2);ctx.stroke()}else if(p.shape==="ribbon"){ctx.fillRect(-p.w*.4,-p.h*1.7,p.w*.8,p.h*3.4)}else if(p.shape==="star"){ctx.beginPath();for(let k=0;k<10;k++){const rr=k%2?p.w*.42:p.w,ang=-Math.PI/2+k*Math.PI/5;ctx.lineTo(Math.cos(ang)*rr,Math.sin(ang)*rr)}ctx.closePath();ctx.fill()}else ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore()}
+  if(parts.length||now-started<6200)requestAnimationFrame(draw);else{ctx.clearRect(0,0,W,H);canvas.remove()}}
+ requestAnimationFrame(draw);window.addEventListener("resize",resize,{once:true});setTimeout(()=>{if(canvas.isConnected)canvas.remove()},7000);
 }
-function togglePurchased(id,trigger){let x=items.find(i=>i.id===id);if(!x)return;let acquired=x.status!=="Purchased";if(!acquired){x.status="To Buy";x.purchasedAt="";x.actual=0;toast("Moved back to My List")}else{x.status="Purchased";x.purchasedAt=new Date().toISOString();if(trigger)celebrateAcquired(trigger)}save();if(acquired&&trigger){trigger.disabled=true;setTimeout(()=>render(),220)}else render()}
+function togglePurchased(id,trigger){let x=items.find(i=>i.id===id);if(!x)return;const acquiring=x.status!=="Purchased";if(acquiring&&trigger){trigger.classList.add("is-pressing");const captured=trigger.getBoundingClientRect();celebrateAcquired(trigger,captured);setTimeout(()=>trigger.classList.remove("is-pressing"),150)}if(acquiring){x.status="Purchased";x.purchasedAt=new Date().toISOString()}else{x.status="To Buy";x.purchasedAt="";x.actual=0}save();if(acquiring&&trigger){trigger.disabled=true;setTimeout(()=>{render();const body=document.querySelector("#view .detailbody");if(body){body.classList.remove("acquire-push");void body.offsetWidth;body.classList.add("acquire-push")}},155)}else render()}
+
 function journey(){let arr=bought().slice().sort((a,b)=>new Date(b.purchasedAt||b.added)-new Date(a.purchasedAt||a.added));$("#view").innerHTML=`<div class="journeyhero"><div class="eyebrow">LOOK HOW FAR YOU'VE COME</div><h1>My Journey</h1><div style="font-size:12px;color:#eee">The things you've brought to life.</div></div><div class="sectionhead" style="padding:8px 22px"><h2>Milestones</h2></div><div class="timeline">${arr.length?arr.map(x=>`<div class="timeitem"><img class="mini" src="${esc(x.aspirationImage||x.productImage||HEROES[0].url)}"><div style="flex:1"><strong>${esc(x.name)}</strong><small>${x.purchasedAt?new Date(x.purchasedAt).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):"Date not recorded"}${x.actual?" · "+money(x.actual):""}</small></div><span style="color:var(--green2)">✓</span></div>`).join(""):'<div class="empty"><b>Your first milestone is waiting.</b>When you acquire something from your list, it will be celebrated here.</div>'}</div>`}
 function progressPage(){let cats=collections.map(c=>c.name);let max=items.length;$("#view").innerHTML=`<div class="pagehead"><div><h1>Progress</h1><p>A closer look at your journey.</p></div></div><div class="progresshero"><div class="big-ring"><div><strong>${progress()}%</strong><small>OVERALL PROGRESS</small></div></div></div><div class="stats"><div><strong>${items.length}</strong><small>Total items</small></div><div><strong>${bought().length}</strong><small>Acquired</small></div><div><strong>${todo().length}</strong><small>To go</small></div></div><div class="section"><div class="sectionhead"><h2>Spend overview</h2></div><div class="panel"><div class="eyebrow" style="color:var(--green2)">TOTAL INVESTED</div><div style="font-family:Georgia,serif;font-size:32px;margin-top:6px">${money(totalActual())}</div><p style="margin-top:5px">Estimated wishlist value: ${money(totalBudget())}</p></div><div class="sectionhead" style="margin-top:25px"><h2>Collection progress</h2></div>${cats.map(c=>{let all=items.filter(x=>x.category===c),done=all.filter(x=>x.status==="Purchased");if(!all.length)return "";let pct=Math.round(done.length/all.length*100);return `<div class="panel"><div style="display:flex;justify-content:space-between;font-size:12px"><strong>${c}</strong><span class="muted">${done.length} of ${all.length} · ${pct}%</span></div><div class="bar"><span style="width:${pct}%"></span></div></div>`}).join("")}</div>`}
 function openForm(){editId=null;formPriority="Soon";formStatus="To Buy";collectionManuallyChosen=false;page="form";render()}
