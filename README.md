@@ -92,3 +92,9 @@ Source validation: JavaScript syntax and manifest JSON checked. Please test on i
 - Removed the duplicate filtered item count below the My List search row; the header count remains.
 - Cover picker is now an image-only horizontal scroller with up to eight suggestions; labels removed.
 - Service worker cache updated to wantlist-v8.
+
+
+## v1.5.3 consolidated build
+- Integrated the approved Big Burst v2 celebration with theme-specific palettes and reduced-motion support.
+- Retained robust collection tile navigation and collection item search/detail navigation.
+- Refined the floating bottom navigation dock sizing, readability, and iPhone safe-area positioning.
