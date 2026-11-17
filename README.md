@@ -105,3 +105,9 @@ Source validation: JavaScript syntax and manifest JSON checked. Please test on i
 - Midnight Peaks refined with layered midnight navy, blue-slate surfaces, and champagne accents in light and dark appearance.
 - Floating bottom navigation enlarged and repositioned with improved labels, icons, and iPhone safe-area spacing.
 - Collection navigation fix retained from v1.5.2/v1.5.3.
+
+
+## v1.5.5 Celebration refinement
+- Reworked the acquired celebration for a denser immediate burst, stronger outward velocity, larger foil/confetti/ribbons/streamers, a brief shock ring, and a quick secondary volley.
+- Tuned the effect for an approximately 2.5–3 second finish while retaining theme palettes and iOS Reduce Motion support.
+- All v1.5.4 collection navigation, dock, and Midnight Peaks refinements are retained.
